@@ -15,16 +15,18 @@ function asteroids() {
         asteroidY++;
         basic.pause(1000);
 
-        if (asteroidY > 4) {
-            state = false;
-        }
-
         if (success == true) {
             basic.showIcon(IconNames.Happy);
-            basic.pause(500);
+            basic.pause(300);
             asteroidX = Math.randomRange(0, 4);
             asteroidY = 0;
             success = false;
+        }
+
+        if (asteroidY > 4) {
+            basic.showIcon(IconNames.Sad);
+            basic.pause(300);
+            state = false;
         }
     } else {
         basic.showString("Game Over!");
@@ -46,7 +48,7 @@ input.onButtonPressed(Button.B, function () {
 })
 
 input.onButtonPressed(Button.AB, function () {
-    for (let missileY = 3; missileY > -1; missileY--) {
+    for (let missileY = 4; missileY > 0; missileY--) {
         led.plotBrightness(baseX, missileY, 10);
 
         if (missileY == asteroidY && baseX == asteroidX) {
