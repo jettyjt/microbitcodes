@@ -1,30 +1,30 @@
 let baseX = 2;
-let invaderX = Math.randomRange(0, 4);
-let invaderY = 0;
+let asteroidX = Math.randomRange(0, 4);
+let asteroidY = 0;
 let missileY = 3;
-let fired = false;
+let success = false;
 let state = true;
 
-basic.forever(play);
+basic.forever(asteroids);
 
-function play() {
+function asteroids() {
     if (state == true) {
         basic.clearScreen();
         led.plot(baseX, 4);
-        led.plot(invaderX, invaderY);
-        invaderY++;
+        led.plot(asteroidX, asteroidY);
+        asteroidY++;
         basic.pause(1000);
 
-        if (invaderY > 4) {
+        if (asteroidY > 4) {
             state = false;
         }
 
-        if (missileY == invaderY && baseX == invaderX && fired == true) {
+        if (success == true) {
             basic.showIcon(IconNames.Happy);
-            basic.pause(1000);
-            invaderX = Math.randomRange(0, 4);
-            invaderY = 0;
-            fired = false;
+            basic.pause(500);
+            asteroidX = Math.randomRange(0, 4);
+            asteroidY = 0;
+            success = false;
         }
     } else {
         basic.showString("Game Over!");
@@ -32,22 +32,26 @@ function play() {
 }
 
 input.onButtonPressed(Button.A, function () {
-    if (baseX > 0) {
-        baseX--;
+    baseX--;
+    if (baseX < 0) {
+        baseX = 4;
     }
 })
 
 input.onButtonPressed(Button.B, function () {
-    if (baseX < 4) {
-        baseX++;
+    baseX++;
+    if (baseX > 4) {
+        baseX = 0;
     }
 })
 
 input.onButtonPressed(Button.AB, function () {
-    fired = true;
-    for (let i = 0; i < 4; i++) {
+    for (let missileY = 3; missileY > -1; missileY--) {
         led.plotBrightness(baseX, missileY, 10);
-        missileY--;
+
+        if (missileY == asteroidY && baseX == asteroidX) {
+            basic.pause(200);
+            success = true;
+        }
     }
-    missileY = 3;
 })
